@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Quiz Door Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- 1. LOGIN SCREEN -->
+    <div id="loginScreen" class="screen active">
+        <div class="login-box">
+            <h2>🚪 Quiz Doors</h2>
+            <p>Enter your password to begin:</p>
+            <input type="password" id="passwordInput" placeholder="Your Password" autocomplete="off">
+            <button onclick="attemptLogin()">Enter</button>
+            <p id="loginError" style="color: red; display: none;">Invalid password. Try again.</p>
+        </div>
+    </div>
+
+    <!-- 2. STUDENT: HALLWAY SCREEN -->
+    <div id="hallwayScreen" class="screen">
+        <div class="header">
+            <div>
+                <div style="font-weight: bold;" id="studentName">Student</div>
+                <div style="font-size: 14px; color: #666;">Score: <span id="studentScore">0</span></div>
+            </div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+        <div id="doorGrid" class="door-grid"></div>
+    </div>
+
+    <!-- 3. STUDENT: QUESTION SCREEN -->
+    <div id="questionScreen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="backToHallway()">⬅ Back</button>
+            <div style="font-weight: bold;" id="qDoorId">Door</div>
+        </div>
+        <div id="timerDisplay" class="timer">30</div>
+        <div id="questionContent"></div>
+        <button id="submitBtn" onclick="submitAnswer()" style="margin-top: 20px;">Submit Answer</button>
+    </div>
+
+    <!-- 4. TEACHER: DASHBOARD SCREEN -->
+    <div id="teacherDashboardScreen" class="screen">
+        <div class="header">
+            <h1 style="margin:0; font-size: 20px;">👩‍🏫 Teacher Dashboard</h1>
+            <div style="display:flex; gap:10px;">
+                <button class="purge-btn" onclick="purgeGame()">🗑️ Reset Game</button>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </div>
+        <!-- Add this inside the teacherDashboardScreen -->
+<div class="panel">
+    <h2>⚙️ Game Settings</h2>
+    <div id="configWarning" style="color: #d32f2f; font-weight: bold; display: none; margin-bottom: 10px; font-size: 14px;">
+        ⚠️ Cannot change settings while scores exist! Purge game to edit.
+    </div>
+    <label style="font-size: 14px; font-weight: bold;">MC Lockout (seconds):</label>
+    <input type="number" id="mcLockoutInput" min="0" max="300" value="30" style="width: 100%; margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+    
+    <label style="font-size: 14px; font-weight: bold;">Text/Long Lockout (seconds):</label>
+    <input type="number" id="textLockoutInput" min="0" max="300" value="10" style="width: 100%; margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+    <!-- Add these inside the Game Settings panel -->
+<label style="font-size: 14px; font-weight: bold;">Backout Lockout (seconds):</label>
+<input type="number" id="backoutLockoutInput" min="0" max="300" value="15" style="width: 100%; margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+
+<label style="font-size: 14px; font-weight: bold;">Correct Answer Cooldown (seconds):</label>
+<input type="number" id="correctLockoutInput" min="0" max="300" value="0" style="width: 100%; margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+<hr style="margin: 15px 0; border: none; border-top: 1px solid #eee;">
+<h3 style="margin: 0 0 10px 0; font-size: 15px;">🏆 Points Per Question Type</h3>
+
+<label style="font-size: 14px; font-weight: bold;">MC Points:</label>
+<input type="number" id="mcPointsInput" min="1" max="1000" value="10" style="width: 100%; margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+
+<label style="font-size: 14px; font-weight: bold;">Short Answer Points:</label>
+<input type="number" id="shortPointsInput" min="1" max="1000" value="15" style="width: 100%; margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+
+<label style="font-size: 14px; font-weight: bold;">Long Answer Points:</label>
+<input type="number" id="longPointsInput" min="1" max="1000" value="25" style="width: 100%; margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+<hr style="margin: 15px 0; border: none; border-top: 1px solid #eee;">
+<h3 style="margin: 0 0 10px 0; font-size: 15px;">⏱️ Time Limit Per Question Type (seconds)</h3>
+
+<label style="font-size: 14px; font-weight: bold;">MC Time Limit:</label>
+<input type="number" id="mcTimeInput" min="10" max="600" value="30" style="width: 100%; margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+
+<label style="font-size: 14px; font-weight: bold;">Short Answer Time Limit:</label>
+<input type="number" id="shortTimeInput" min="10" max="600" value="45" style="width: 100%; margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+
+<label style="font-size: 14px; font-weight: bold;">Long Answer Time Limit:</label>
+<input type="number" id="longTimeInput" min="10" max="600" value="90" style="width: 100%; margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+<hr style="margin: 15px 0; border: none; border-top: 1px solid #eee;">
+<label style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: bold; margin-bottom: 15px; cursor: pointer;">
+    <input type="checkbox" id="shortAutoGradeInput" style="width: 20px; height: 20px; margin: 0; cursor: pointer;">
+    Auto-grade Short/Text Answers (Match against database answer)
+</label>
+<small style="display: block; color: #666; margin-top: -10px; margin-bottom: 15px; font-size: 12px;">
+    💡 Tip: You can add multiple acceptable answers in the sheet separated by commas (e.g., "water, h2o").
+</small>
+    <button id="saveConfigBtn" onclick="saveGameConfig()" style="width: 100%;">💾 Save Settings</button>
+</div>
+        <div class="dashboard-grid">
+            <div>
+                <div class="panel">
+                    <h2>🚪 Live Door Status</h2>
+                    <div id="teacherDoorGrid" class="door-grid">Loading...</div>
+                </div>
+                <div class="panel">
+                    <h2>⏳ Pending Grading Queue</h2>
+                    <div id="gradingQueue">No pending answers.</div>
+                </div>
+            </div>
+            <div>
+                <div class="panel">
+                    <h2>🏆 Live Leaderboard</h2>
+                    <table>
+                        <thead><tr><th>#</th><th>Name</th><th>Class</th><th>Score</th></tr></thead>
+                        <tbody id="leaderboardBody"><tr><td colspan="4">Loading...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Message</div>
+
+    <!-- IMPORTANT: type="module" is REQUIRED because script.js uses ES module imports -->
+    <script type="module" src="core.js"></script>
+    <script type="module" src="config.js"></script>
+    <script type="module" src="logic.js"></script>
+    
+
+</body>
+</html>
