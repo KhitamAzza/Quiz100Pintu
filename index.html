@@ -11,11 +11,11 @@
     <!-- 1. LOGIN SCREEN -->
     <div id="loginScreen" class="screen active">
         <div class="login-box">
-            <h2>🚪 Quiz Doors</h2>
-            <p>Enter your password to begin:</p>
+            <h2>🚪 Quiz Pintu</h2>
+            <p>Masukkan password untuk mulai:</p>
             <input type="password" id="passwordInput" placeholder="Your Password" autocomplete="off">
             <button onclick="attemptLogin()">Enter</button>
-            <p id="loginError" style="color: red; display: none;">Invalid password. Try again.</p>
+            <p id="loginError" style="color: red; display: none;">Password salah, ulangi.</p>
         </div>
     </div>
 
@@ -23,7 +23,7 @@
     <div id="hallwayScreen" class="screen">
         <div class="header">
             <div>
-                <div style="font-weight: bold;" id="studentName">Student</div>
+                <div style="font-weight: bold;" id="studentName">Siswa</div>
                 <div style="font-size: 14px; color: #666;">Score: <span id="studentScore">0</span></div>
             </div>
             <button class="logout-btn" onclick="logout()">Logout</button>
@@ -35,17 +35,17 @@
     <div id="questionScreen" class="screen">
         <div class="header">
             <button class="back-btn" onclick="backToHallway()">⬅ Back</button>
-            <div style="font-weight: bold;" id="qDoorId">Door</div>
+            <div style="font-weight: bold;" id="qDoorId">Pintu</div>
         </div>
         <div id="timerDisplay" class="timer">30</div>
         <div id="questionContent"></div>
-        <button id="submitBtn" onclick="submitAnswer()" style="margin-top: 20px;">Submit Answer</button>
+        <button id="submitBtn" onclick="submitAnswer()" style="margin-top: 20px;">Kirim jawaban</button>
     </div>
 
     <!-- 4. TEACHER: DASHBOARD SCREEN -->
     <div id="teacherDashboardScreen" class="screen">
         <div class="header">
-            <h1 style="margin:0; font-size: 20px;">👩‍🏫 Teacher Dashboard</h1>
+            <h1 style="margin:0; font-size: 20px;">Dashboard guru</h1>
             <div style="display:flex; gap:10px;">
                 <button class="purge-btn" onclick="purgeGame()">🗑️ Reset Game</button>
                 <button class="logout-btn" onclick="logout()">Logout</button>
@@ -53,69 +53,69 @@
         </div>
         <!-- Add this inside the teacherDashboardScreen -->
 <div class="panel">
-    <h2>⚙️ Game Settings</h2>
+    <h2>⚙️ Game Setting</h2>
     <div id="configWarning" style="color: #d32f2f; font-weight: bold; display: none; margin-bottom: 10px; font-size: 14px;">
-        ⚠️ Cannot change settings while scores exist! Purge game to edit.
+        ⚠️ Tidak bisa ganti setting saat game dimulai, hapus nilai dulu.
     </div>
-    <label style="font-size: 14px; font-weight: bold;">MC Lockout (seconds):</label>
+    <label style="font-size: 14px; font-weight: bold;">Pilihan ganda Lockout (detik):</label>
     <input type="number" id="mcLockoutInput" min="0" max="300" value="30" style="width: 100%; margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
     
-    <label style="font-size: 14px; font-weight: bold;">Text/Long Lockout (seconds):</label>
+    <label style="font-size: 14px; font-weight: bold;">Text Lockout (detik):</label>
     <input type="number" id="textLockoutInput" min="0" max="300" value="10" style="width: 100%; margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
     <!-- Add these inside the Game Settings panel -->
-<label style="font-size: 14px; font-weight: bold;">Backout Lockout (seconds):</label>
+<label style="font-size: 14px; font-weight: bold;">Mundur dari soal (detik):</label>
 <input type="number" id="backoutLockoutInput" min="0" max="300" value="15" style="width: 100%; margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
 
-<label style="font-size: 14px; font-weight: bold;">Correct Answer Cooldown (seconds):</label>
+<label style="font-size: 14px; font-weight: bold;">Correct Answer Cooldown (detik):</label>
 <input type="number" id="correctLockoutInput" min="0" max="300" value="0" style="width: 100%; margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
 <hr style="margin: 15px 0; border: none; border-top: 1px solid #eee;">
-<h3 style="margin: 0 0 10px 0; font-size: 15px;">🏆 Points Per Question Type</h3>
+<h3 style="margin: 0 0 10px 0; font-size: 15px;">🏆 Point setiap pertanyaan</h3>
 
-<label style="font-size: 14px; font-weight: bold;">MC Points:</label>
+<label style="font-size: 14px; font-weight: bold;">Poin pilihan ganda:</label>
 <input type="number" id="mcPointsInput" min="1" max="1000" value="10" style="width: 100%; margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
 
-<label style="font-size: 14px; font-weight: bold;">Short Answer Points:</label>
+<label style="font-size: 14px; font-weight: bold;">Poin jawaban singkat</label>
 <input type="number" id="shortPointsInput" min="1" max="1000" value="15" style="width: 100%; margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
 
-<label style="font-size: 14px; font-weight: bold;">Long Answer Points:</label>
+<label style="font-size: 14px; font-weight: bold;">Poin jawaban panjang</label>
 <input type="number" id="longPointsInput" min="1" max="1000" value="25" style="width: 100%; margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
 <hr style="margin: 15px 0; border: none; border-top: 1px solid #eee;">
-<h3 style="margin: 0 0 10px 0; font-size: 15px;">⏱️ Time Limit Per Question Type (seconds)</h3>
+<h3 style="margin: 0 0 10px 0; font-size: 15px;">⏱️ Batas waktu tiap pertanyaan</h3>
 
-<label style="font-size: 14px; font-weight: bold;">MC Time Limit:</label>
+<label style="font-size: 14px; font-weight: bold;">batas waktu pilihan ganda</label>
 <input type="number" id="mcTimeInput" min="10" max="600" value="30" style="width: 100%; margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
 
-<label style="font-size: 14px; font-weight: bold;">Short Answer Time Limit:</label>
+<label style="font-size: 14px; font-weight: bold;">batas waktu jawaban singkat</label>
 <input type="number" id="shortTimeInput" min="10" max="600" value="45" style="width: 100%; margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
 
-<label style="font-size: 14px; font-weight: bold;">Long Answer Time Limit:</label>
+<label style="font-size: 14px; font-weight: bold;">batas waktu jawaban panjang</label>
 <input type="number" id="longTimeInput" min="10" max="600" value="90" style="width: 100%; margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
 <hr style="margin: 15px 0; border: none; border-top: 1px solid #eee;">
 <label style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: bold; margin-bottom: 15px; cursor: pointer;">
     <input type="checkbox" id="shortAutoGradeInput" style="width: 20px; height: 20px; margin: 0; cursor: pointer;">
-    Auto-grade Short/Text Answers (Match against database answer)
+    Auto-grade jawaban singkat (jika diaktifkan, jawaban akan otomatis dinilai benar/salah berdasarkan jawaban yang diterima)
 </label>
 <small style="display: block; color: #666; margin-top: -10px; margin-bottom: 15px; font-size: 12px;">
-    💡 Tip: You can add multiple acceptable answers in the sheet separated by commas (e.g., "water, h2o").
+    💡 Tips: anda bisa memberi jawaban lebih dari satu menggunakan koma cth (air,h20)
 </small>
-    <button id="saveConfigBtn" onclick="saveGameConfig()" style="width: 100%;">💾 Save Settings</button>
+    <button id="saveConfigBtn" onclick="saveGameConfig()" style="width: 100%;">💾 simpan setting</button>
 </div>
         <div class="dashboard-grid">
             <div>
                 <div class="panel">
-                    <h2>🚪 Live Door Status</h2>
+                    <h2>🚪 status pintu</h2>
                     <div id="teacherDoorGrid" class="door-grid">Loading...</div>
                 </div>
                 <div class="panel">
-                    <h2>⏳ Pending Grading Queue</h2>
-                    <div id="gradingQueue">No pending answers.</div>
+                    <h2>⏳ harap tunggu</h2>
+                    <div id="gradingQueue">tidak ada jawaban pending.</div>
                 </div>
             </div>
             <div>
                 <div class="panel">
                     <h2>🏆 Live Leaderboard</h2>
                     <table>
-                        <thead><tr><th>#</th><th>Name</th><th>Class</th><th>Score</th></tr></thead>
+                        <thead><tr><th>#</th><th>Nama</th><th>Kelas</th><th>Score</th></tr></thead>
                         <tbody id="leaderboardBody"><tr><td colspan="4">Loading...</td></tr></tbody>
                     </table>
                 </div>
