@@ -81,7 +81,7 @@ function renderGradingQueue(doors) {
         }
     }
     if (!hasPending) {
-        queue.innerHTML = '<div style="color: #888; text-align: center; padding: 20px;">🎉 All caught up!</div>';
+        queue.innerHTML = '<div style="color: #888; text-align: center; padding: 20px;">tidak ada jawaban siswa</div>';
     }
 }
 
