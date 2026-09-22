@@ -321,7 +321,7 @@ function startTimer(doorId, doorData) {
         updateTimerDisplay(timeLeft);
         if (timeLeft <= 0) {
             clearInterval(interval);
-            showToast("⏰ Time's up!");
+            showToast("⏰ Waktu habis");
             await handleWrongAnswer(doorId, doorData.type); 
         }
     }, 1000);
@@ -361,7 +361,7 @@ window.submitAnswer = async () => {
             await handleCorrectAnswer(currentDoorId, doorData);
         } else {
             const secs = gameConfig.mc_lockout || 30;
-            await handleWrongAnswer(currentDoorId, secs, `❌ Wrong answer! Locked out for ${secs}s`);
+            await handleWrongAnswer(currentDoorId, secs, `❌ Jawaban salah penalti ${secs}s`);
         }
     } 
     // --- TEXT / SHORT / LONG ANSWER LOGIC ---
@@ -387,7 +387,7 @@ window.submitAnswer = async () => {
             } else {
                 // No match. Treat as wrong instantly.
                 const secs = gameConfig.text_lockout || 10;
-                await handleWrongAnswer(currentDoorId, secs, `❌ Wrong answer! Locked out for ${secs}s`);
+                await handleWrongAnswer(currentDoorId, secs, `❌ Jawaban salah penalti ${secs}s`);
             }
         } 
         // --- EXISTING: Manual Teacher Grading (Fallback) ---
@@ -437,7 +437,7 @@ window.backToHallway = async () => {
             current_door: null
         });
         currentUser.global_cooldown = cooldownTime;
-        showToast(`🚪 Backed out! Locked out for ${secs}s`);
+        showToast(`🚪 mundur dari soal penalty ${secs}s`);
     }
 
     setCurrentDoorId(null);
@@ -484,7 +484,7 @@ async function handleWrongAnswer(doorId, cooldownSeconds, toastMessage) {
     currentUser.global_cooldown = cooldownTime; 
 
     await update(ref(db), updates);
-    showToast(toastMessage || `❌ Wrong/Backed out! Locked out for ${cooldownSeconds}s`);
+    showToast(toastMessage || `❌ jawaban salah penalti ${cooldownSeconds}s`);
     setCurrentDoorId(null);
     showScreen('hallwayScreen');
 }
